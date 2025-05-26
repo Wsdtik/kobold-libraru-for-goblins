@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  userName    String?     @unique
+  email       String?     @unique
+  role        Role        @default(USER)
+  publishRole PublishRole @default(READER)
+
+  BookStorage BookStorage[]
+
+  Book Book[]
+
+  UserStorage UserStorage[]
+}
+
+model UserStorage {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @unique
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  BookStorage BookStorage[]
+
+  UserStorage UserStorage[]
+}
+
+model Book {
+  id           Int      @id @default(autoincrement())
+  title        String
+  author       User?    @relation(fields: [authorId], references: [id])
+  authorId     Int?
+  publishDate  DateTime
+  file         String
+  isBookPosted Boolean  @default(false)
+
+  BookStorage BookStorage[]
+}
+
+model BookStorage {
+  id         Int       @id @default(autoincrement())
+  books      Book[]
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PublishRole {
+  AUTHOR
+  READER
+  PUBLISHER
+}

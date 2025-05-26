@@ -1,0 +1,15 @@
+{
+    "goblin": [
+        {
+            "id":"0",
+            "name":"any",
+            "image" : "../lib/images/ena-pls-stop.jpg"
+            
+        },
+        {
+            "id":"0",
+            "name":"any",
+            "image" : "../lib/images/ena-pls-stop.jpg"
+        }
+    ]
+}
